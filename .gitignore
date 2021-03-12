@@ -1,2 +1,4 @@
 keys.py
 venv/
+.vscode/
+__pycache__/
