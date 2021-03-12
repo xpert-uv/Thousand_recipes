@@ -1,12 +1,19 @@
 Project Proposal:
 
 1.	What goal will your website be designed to achieve?
-It will help the user to search for food recipes and cocktails recipes. Along with, suggest the matching wine for meal. 
+
+
+##It will help the user to search for food recipes and cocktails recipes. Along with, suggest the matching wine for meal. 
 
 2.	What kind of users will visit your site? In other words, what is the demographic of your users?
-This website has wide range of users. Anybody, above the age of four can use this website. This application is for those who has even slightest interest in cooking, and those who wonder what wine should I drink with this meal? In addition, people form culinary world to every mom in household can use this website.
+
+
+##This website has wide range of users. Anybody, above the age of four can use this website. This application is for those who has even slightest interest in cooking, and those who wonder what wine should I drink with this meal? In addition, people form culinary world to every mom in household can use this website.
 
 3.	What data do you plan on using? You may have not picked your actual API yet, which is fine, just outline what kind of data you would like it to contain.
+    
+    
+I would use spoonacular.api which response in Json.  
 
 4.	 What does your database schema look like?
 User (id, username, password, first name, last name, email-(for sending validation code or email))
