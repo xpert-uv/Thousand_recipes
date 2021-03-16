@@ -20,10 +20,10 @@ connect_db(app)
 using keywords: https://api.spoonacular.com/recipes/search?query=pasta&apiKey={keys.s_api}
 
 recipe's details: https://api.spoonacular.com/recipes/{id}/information?apiKey={keys.s_api}
-get ingdrents by id: https://api.spoonacular.com/recipes/715538/ingredientWidget.json?apiKey=1edd0ae07bdd44df9d7fbde570f1134a
+get ingdrents by id: https://api.spoonacular.com/recipes/715538/ingredientWidget.json?apiKey={}
 
 wine:
-keywords:https://api.spoonacular.com/food/wine/recommendation?wine=merlot&number=2&apiKey=1edd0ae07bdd44df9d7fbde570f1134a
+keywords:https://api.spoonacular.com/food/wine/recommendation?wine=merlot&number=2&apiKey={}
 Dish_Paring_For_Wine: https://api.spoonacular.com/food/wine/dishes?wine=malbec&apiKey={keys.s_api}
 Wine_Paring_For_Food: https://api.spoonacular.com/food/wine/pairing?food=steak&apiKey={keys.s_api}
 
