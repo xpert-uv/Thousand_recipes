@@ -1,0 +1,11 @@
+{% extends 'recipe_details.html'%}
+{% block title %} Saved Recipe Details{% endblock %}
+{% block buttons%}
+
+<a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{recipe.id}}'
+    data-id=${recipe.id}>Delete</a>
+
+<a id="view-btn" type="button" class="btn btn-success view-btn" href='/recipe/delete/{{recipe.id}}'
+    data-id=${recipe.id}>Wine Paring</a>
+
+{%endblock%}

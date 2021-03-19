@@ -1,0 +1,27 @@
+{% extends "home.html"%}
+{% block title%}My Recipes{%endblock%}
+{% block content%}
+
+<div class="container d-flex ">
+    <div class="row search">
+        {% for save in s_recipe%}
+        <div class="col-sm-4 ">
+            <div class="card my-3">
+                <img src="{{save.image_url}}" class="card-img-top" alt="...">
+                <div class="card-body text-dark">
+                    <ul>
+                        <li>{{save.dish_name}}</li>
+                        <li>Ready In:{{save.total_time}}</li>
+                    </ul>
+                    <a id="view-btn" type="button" class="btn btn-danger view-btn"
+                        href='/savedrecipe/details/{{save.dish_id}}'>View</a>
+                    <a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{save.dish_id}}'
+                        data-id=${recipe.id}>Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script src='/static/saveRecipe.js'></script>
+{%endblock%}

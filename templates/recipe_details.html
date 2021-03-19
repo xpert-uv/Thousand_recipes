@@ -1,0 +1,23 @@
+{%extends 'home.html'%}
+{% block title%} Recipe Deatils{%endblock%}
+{% block content%}
+<div id="signupBox" class="container mt-3 ">
+    <div class="card mt-3 mb-3">
+        <img src="{{recipe.image}}" class="card-img-top" alt="...">
+        <div class="card-body text-dark">
+            <h1 class="display-1">{{recipe.title}}</h1>
+            <p class='simpletext'><b>Ready In:</b>{{recipe.total_time}}</p>
+            <p class='simpletext'><b>Info:</b><br>{{recipe.description}}</p>
+            <p class='simpletext'><b>ingredients :</b><br>{{recipe.ingredients}}</p>
+            <p class='simpletext'><b>Instruction :</b> <br>{{recipe.instructions}}</p>
+            <a id="view-btn" type="button" class="btn btn-dark view-btn" href='{{BASE_API}}/home'>Back</a>
+            {% block buttons%}
+
+            <a id="view-btn" type="button" class="btn btn-danger view-btn" href='{{BASE_API}}/saverecipe/{{recipe.id}}'
+                data-id=${recipe.id}>Save</a>
+            {%endblock%}
+        </div>
+    </div>
+</div>
+</div>
+{%endblock%}
