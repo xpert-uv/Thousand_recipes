@@ -82,9 +82,12 @@ def wine_paring_for_recipe(recipe_id):
     response = requests.get(
         f'{BASE_API}/recipes/{recipe_id}/information?apiKey={s_api}')
     json_response = response.json()
-    if 'winePairing' in json_response and len(json_response['winePairing']['pairedWines']) != 0:
-        final_response = json_response['winePairing']
-        return final_response
+    try:
+        if 'winePairing' in json_response and len(json_response['winePairing']['pairedWines']) != 0:
+            final_response = json_response['winePairing']
+            return final_response
+    except KeyError:
+        return False
 
 
 ############################# Functions for Wine and Wine paring #########################

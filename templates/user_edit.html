@@ -1,17 +1,22 @@
-{% extends 'landingpage.html'%}
-{% block title%}Sign Up{% endblock %}
-{%block content%}
+{% extends 'home.html'%}
+{% block title%}Edit User{% endblock %}
+{% block link%}
+<link rel="stylesheet" type="text/css" href="/static/css/user.css"> {% endblock %}
+
+
+{% block content %}
 
 <div id="signupBox">
-    <h1 class="display-1 ms-4">Sing Up</h1>
+    <h1 class="display-1 ms-4">Users Details</h1>
     <div class="mx-5 my-3">
-        <form action="/signup" method="POST">
+        <form action="/user/{{g.user.id}}/edit" method="POST">
             {{form.hidden_tag()}}
             {% for field in form
             if field.widget.input_type != 'hidden'%}
 
             {{field.label(class_="col-6 text-dark")}}
             {{field(class_="form-control")}}
+
             <p class="text-danger">
                 {% for err in field.errors %}
                 {{err}}
@@ -19,8 +24,8 @@
             </p>
             {%endfor%}
 
-            <button class="btn btn-light mt-3" type='submit'>Sign Up</button>
-            <a class="btn btn-dark mt-3" type='button' href="/">Cancel</a>
+            <button class="btn btn-light mt-3" type='submit'>Save</button>
+            <a class="btn btn-dark mt-3" type='button' href="/home">Cancel</a>
         </form>
     </div>
 </div>

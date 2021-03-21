@@ -30,7 +30,7 @@ function generateWineHTML(wine) {
              <li>${wine.price}</li>
             <li>Info:<br>${wine.description}</li>
             </ul>
-            <a id="view-btn" type="button" class="btn btn-danger view-btn" href='${BASE_API}/recipedetail/${wine.id}' data-id=${wine.id}>View</a>
+           
             </div>
             </div>
             </div>`;

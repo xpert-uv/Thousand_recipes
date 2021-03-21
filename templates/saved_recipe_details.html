@@ -1,7 +1,7 @@
 {% extends 'recipe_details.html'%}
 {% block title %} Saved Recipe Details{% endblock %}
 {% block link%}
-<link rel="stylesheet" type="text/css" href="../static/css/home.css"> {% endblock %}
+<link rel="stylesheet" type="text/css" href="/static/css/home.css"> {% endblock %}
 {% block buttons%}
 
 <a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{recipe.id}}'
@@ -21,4 +21,3 @@
 </div>
 <script src='/static/saveRecipe.js'></script>
 {%endblock%}
-//href='/api/wineparing/{{recipe.id}}

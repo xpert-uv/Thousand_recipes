@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, session, g, jsonify, flash
 
-from model import db, connect_db, User, Food, Cocktails, Wine, Wineparing
+from model import db, connect_db, User, Food,  Wine, Wineparing
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
@@ -21,21 +21,7 @@ app.config['SECRET_KEY'] = os.environ.get(keys.SECRET_KEY, 'SQLALCHEMY')
 connect_db(app)
 # db.drop_all()
 # db.create_all()
-""" api setups:
-using keywords: https://api.spoonacular.com/recipes/search?query=pasta&apiKey={keys.s_api}
 
-recipe's details: https://api.spoonacular.com/recipes/{id}/information?apiKey={keys.s_api}
-get ingdrents by id: https://api.spoonacular.com/recipes/715538/ingredientWidget.json?apiKey={}
-
-wine:
-keywords:https://api.spoonacular.com/food/wine/recommendation?wine=merlot&number=2&apiKey={}
-Dish_Paring_For_Wine: https://api.spoonacular.com/food/wine/dishes?wine=malbec&apiKey={keys.s_api}
-Wine_Paring_For_Food: https://api.spoonacular.com/food/wine/pairing?food=steak&apiKey={keys.s_api}
-
-cocktails:
-
-
-"""
 ###################### Users ###########################
 
 
@@ -73,7 +59,6 @@ def sing_up():
                                  first_name, last_name)
             db.session.add(user)
             db.session.commit()
-            # session['username'] = new.username
             flash("User Created!", "success")
 
         except IntegrityError:
@@ -103,10 +88,10 @@ def login():
     """Handle user login."""
 
     form = LoginForm()
+    try:
 
-    if form.validate_on_submit():
-        user = User.authenticate(form.username.data,
-                                 form.password.data)
+        if form.validate_on_submit():
+            user = User.authenticate(form.username.data, form.password.data)
 
         if user:
             do_login(user)
@@ -114,11 +99,33 @@ def login():
             return redirect("/home")
 
         flash("Invalid credentials.", 'danger')
+    except ValueError:
+        flash("Invalid Password", "danger")
 
     return render_template('landingpage.html', form=form)
 
 
+@app.route('/user/<int:id>/edit', methods=['GET', 'POST'])
+def edit_user(id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    else:
+        user = User.query.get_or_404(id)
+        form = SignUpForm(obj=user)
+        if form.validate_on_submit():
+            user.username = form.username.data
+            user.password = form.password.data
+            user.email = form.email.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            db.session.add(user)
+            db.session.commit()
+            flash("User Details Updated", "success")
+            return redirect(f'/user/{id}/edit')
+        return render_template("user_edit.html", form=form)
 #################### Recipes ##################
+
 
 @app.route('/')
 def landingpage():
@@ -177,7 +184,6 @@ def recipe_lists():
         return redirect("/")
     else:
         recipe_list = Food.query.all()
-        response = {"list": recipe_list}
         return render_template("saved_recipe.html", s_recipe=recipe_list)
 
 

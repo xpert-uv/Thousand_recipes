@@ -23,8 +23,6 @@ class User(db.Model):
         "wine.id", ondelete='CASCADE'))
     food = db.Column(db.Integer, db.ForeignKey(
         "foodrecipes.id"))
-    cocktail = db.Column(db.Integer, db.ForeignKey(
-        "cocktails.id"))
 
     def __repr__(self):
         return f'< user id ={self.id}, username = {self.username}, first_name={self.first_name}, last_name={self.last_name}>'
@@ -64,26 +62,12 @@ class Food(db.Model):
         return f'< Recipe id = {self.id},dish_id ={self.dish_id}, dish name = {self.dish_name}, description = {self.description}, ingredients = {self.ingredients}, instruction = {self.instruction}, prep time = {self.prep_time}, total time = {self.total_time}, image = {self.image_url} >'
 
 
-class Cocktails(db.Model):
-    __tablename__ = 'cocktails'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    cocktail_name = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    ingredients = db.Column(db.Text, nullable=False)
-    instruction = db.Column(db.Text, nullable=False)
-    prep_time = db.Column(db.Integer, default=10, nullable=False)
-    image_url = db.Column(db.Text, nullable=False,
-                          default="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80")
-
-    def __repr__(self):
-        return f'< Cocktails id = {self.id}, dish name = {self.dish_name}, description = {self.description}, ingredients = {self.ingredients}, instruction = {self.instruction},prep time = {self.prep_time}, image = {self.image_url} >'
-
-
 class Wine(db.Model):
     __tablename__ = "wine"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    wine_id = db.Column(db.Integer, unique=True)
     wine_name = db.Column(db.String(30), nullable=False)
-    wine_type = db.Column(db.String(50), nullable=False)
+    wine_type = db.Column(db.String(50))
     description = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text, nullable=False,
                           default="https://images.unsplash.com/photo-1585553616435-2dc0a54e271d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80")
