@@ -13,7 +13,7 @@ def Search_recipe(recipename):
      and returns the filtered data in json format. """
 
     response = requests.get(
-        f'{BASE_API}/recipes/search?query={recipename}&apiKey={s_api}')
+        f'{BASE_API}/recipes/search?query={recipename}&apiKey={s_api}&number=50')
     json_response = response.json()
     if response.status_code != 200:
         return json_response
@@ -45,6 +45,9 @@ def Recipe_details(recipe_id):
         f'{BASE_API}/recipes/{recipe_id}/ingredientWidget.json?apiKey={s_api}')
     json_response_ing = response_ing.json()
 
+    # API request to get Instruction
+  #  response_instruction = requests.get()
+
     if response.status_code != 200:
         return json_response
     elif response_ing.status_code != 200:
@@ -75,6 +78,15 @@ def Recipe_details(recipe_id):
         return final_response
 
 
+def wine_paring_for_recipe(recipe_id):
+    response = requests.get(
+        f'{BASE_API}/recipes/{recipe_id}/information?apiKey={s_api}')
+    json_response = response.json()
+    if 'winePairing' in json_response and len(json_response['winePairing']['pairedWines']) != 0:
+        final_response = json_response['winePairing']
+        return final_response
+
+
 ############################# Functions for Wine and Wine paring #########################
 
 def Search_wine(wine_name):
@@ -84,7 +96,7 @@ def Search_wine(wine_name):
 
     """
     response = requests.get(
-        f'{BASE_API}/food/wine/recommendation?wine={wine_name}&number=20&apiKey={s_api}')
+        f'{BASE_API}/food/wine/recommendation?wine={wine_name}&number=50&apiKey={s_api}')
     json_response = response.json()
     if response.status_code != 200:
         return json_response

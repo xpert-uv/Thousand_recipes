@@ -1,11 +1,24 @@
 {% extends 'recipe_details.html'%}
 {% block title %} Saved Recipe Details{% endblock %}
+{% block link%}
+<link rel="stylesheet" type="text/css" href="../static/css/home.css"> {% endblock %}
 {% block buttons%}
 
 <a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{recipe.id}}'
     data-id=${recipe.id}>Delete</a>
 
-<a id="view-btn" type="button" class="btn btn-success view-btn" href='/recipe/delete/{{recipe.id}}'
-    data-id=${recipe.id}>Wine Paring</a>
+<a id="wine-btn" type="button" class="btn btn-success wine-btn" data-id={{recipe.id}}>Wine Paring</a>
 
+<div id="noWine" class="container"></div>
+<div id="winebox" class="container my-3">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+    </ul>
+    <div class="tab-content" id="myTabContent">
+
+
+    </div>
+</div>
+<script src='/static/saveRecipe.js'></script>
 {%endblock%}
+//href='/api/wineparing/{{recipe.id}}

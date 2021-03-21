@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, session, g, jsonify, flash
 
 from model import db, connect_db, User, Food, Cocktails, Wine, Wineparing
-from myfunc import Search_recipe, Recipe_details, Search_wine, Wine_paring_for_meal, Dish_paring_for_wine
+from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
 
@@ -36,6 +36,7 @@ cocktails:
 
 
 """
+###################### Users ###########################
 
 
 @app.before_request
@@ -116,6 +117,8 @@ def login():
 
     return render_template('landingpage.html', form=form)
 
+
+#################### Recipes ##################
 
 @app.route('/')
 def landingpage():
@@ -198,3 +201,41 @@ def delete_recipe(id):
         db.session.delete(del_recipe)
         db.session.commit()
         return redirect('/savedrecipe')
+
+
+######################## Wine ################
+
+
+@app.route('/api/wineparing/<int:id>')
+def wineparing_recipe(id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    else:
+        response = wine_paring_for_recipe(id)
+        if response:
+            return jsonify(response)
+        else:
+            response = {
+                "wineParing": "No wine is reccomended with this meal"
+            }
+            return jsonify(response)
+
+
+@app.route('/wine')
+def wine_home():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    else:
+        return render_template("wine.html")
+
+
+@app.route('/searchwine/<type>')
+def search_wine(type):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    else:
+        response = Search_wine(type)
+        return jsonify(response)
