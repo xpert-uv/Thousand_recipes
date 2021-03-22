@@ -1,9 +1,12 @@
-from flask import Flask, request, render_template, redirect, session, g, jsonify, flash
+from flask import Flask, request, render_template, redirect, session, g, jsonify, flash, url_for
 
 from model import db, connect_db, User, Food,  Wine, Wineparing
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
+
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Mail, Message
 
 import keys
 import os
@@ -12,15 +15,31 @@ import requests
 CURR_USER_KEY = keys.CURR_USER_KEY
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', keys.database)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get(keys.SECRET_KEY, 'SQLALCHEMY')
+app.config['MAIL_FROM_EMAIL'] = ""
+app.config['MAIL_SERVER'] = keys.MAIL_SERVER
+app.config['MAIL_PORT'] = keys.MAIL_PORT
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEBUG'] = False
+app.config['MAIL_USERNAME'] = keys.MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = keys.MAIL_PASSWORD
+app.config['MAIL_DEFAULT_SENDER'] = keys.MAIL_DEFAULT_SENDER
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 connect_db(app)
-# db.drop_all()
-# db.create_all()
+mail = Mail(app)
+db.drop_all()
+db.create_all()
 
 ###################### Users ###########################
 
@@ -60,7 +79,11 @@ def sing_up():
             db.session.add(user)
             db.session.commit()
             flash("User Created!", "success")
-
+            token = s.dumps(email, salt="email-confirm")
+            msg = Message("confirm Email", recipients=[email])
+            link = url_for('confirm_email', token=token, _external=True)
+            msg.body = f"<b> Click to confirm your account :: {link} <b>"
+            mail.send(msg)
         except IntegrityError:
             flash("Username already taken", 'danger')
             flash("email is already used", 'danger')
@@ -71,6 +94,16 @@ def sing_up():
         return redirect("/home")
     else:
         return render_template("signup_form.html", form=form)
+
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    email = s.loads(token, salt="email-confirm", max_age=3000)
+    user = User.query.filter(User.email == email).first()
+    user.email_confirm = True
+    db.session.add(user)
+    db.session.commit()
+    return "<h1> You Account has been confirmed</h1>"
 
 
 @app.route('/logout')
