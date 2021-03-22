@@ -16,7 +16,7 @@ function generateWineHTML_tabs(wine) {
 
 function generateWineHTML_tab_pannel(wine) {
     return `
-         <div class="tab-pane fade row d-flex" id="${wine}" role="tabpanel" aria-labelledby="${wine}-tab">...</div>
+         <div class="tab-pane fade " id="${wine}" role="tabpanel" aria-labelledby="${wine}-tab">...</div>
         `;
 }
 
@@ -57,13 +57,13 @@ async function paringWine() {
 $("#myTab").on("click", ".nav-item", searchWine);
 
 async function searchWine() {
-    const wineType = $(this).children().data("id");
-    console.log(wineType);
-    const response = await axios.get(`${BASE_API}/searchwine/${wineType}`);
 
+    const wineType = $(this).children().data("id");
+    const response = await axios.get(`${BASE_API}/searchwine/${wineType}`);
     for (let w_data of response.data.wines) {
-        let wine = $(generateWineHTML(w_data));
-        $(`#${wineType}`).append(wine);
+        let wine = generateWineHTML(w_data);
+        $("#wines").append(wine);
+        console.log($(`#${wineType}`));
     }
 
 }
@@ -71,14 +71,13 @@ async function searchWine() {
 function generateWineHTML(wine) {
     return `<div class="col-sm-4">
              <div class="card mt-3">
-            <img src="${wine.image}" class="card-img-top" alt="..." style:witdh=100px, height=100px;>
+            <img src="${wine.image}" class="card-img-top" alt="...">
             <div class="card-body text-dark">
             <ul>
             <li>${wine.title}</li>
              <li>${wine.price}</li>
             <li>Info:<br>${wine.description}</li>
             </ul>
-           
             </div>
             </div>
             </div>`;
