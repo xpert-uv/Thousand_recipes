@@ -1,11 +1,11 @@
 from flask import Flask, request, render_template, redirect, session, g, jsonify, flash, url_for
 
-from model import db, connect_db, User, Food,  Wine, Wineparing
+from model import db, connect_db, User, Food,  Wine, Wineparing, passwordhash
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
 
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 
 import keys
@@ -38,7 +38,7 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 connect_db(app)
 mail = Mail(app)
-db.drop_all()
+# db.drop_all()
 db.create_all()
 
 ###################### Users ###########################
@@ -98,12 +98,15 @@ def sing_up():
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
-    email = s.loads(token, salt="email-confirm", max_age=3000)
-    user = User.query.filter(User.email == email).first()
-    user.email_confirm = True
-    db.session.add(user)
-    db.session.commit()
-    return "<h1> You Account has been confirmed</h1>"
+    try:
+        email = s.loads(token, salt="email-confirm", max_age=3000)
+        user = User.query.filter(User.email == email).first()
+        user.email_confirm = True
+        db.session.add(user)
+        db.session.commit()
+        return "<h1> You Account has been confirmed</h1>"
+    except SignatureExpired:
+        return "<h1> Your Tocken has expired </h1>"
 
 
 @app.route('/logout')
@@ -148,7 +151,7 @@ def edit_user(id):
         form = SignUpForm(obj=user)
         if form.validate_on_submit():
             user.username = form.username.data
-            user.password = form.password.data
+            user.password = passwordhash(form.password.data)
             user.email = form.email.data
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data

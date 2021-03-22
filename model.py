@@ -42,6 +42,11 @@ class User(db.Model):
             return False
 
 
+def passwordhash(password):
+    hashed_passwd = bcrypt.generate_password_hash(password).decode("utf8")
+    return hashed_passwd
+
+
 class Food(db.Model):
 
     __tablename__ = "foodrecipes"
