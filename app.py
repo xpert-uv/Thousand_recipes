@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, session, g, jsonify, flash, url_for
 
-from model import db, connect_db, User, Food,  Wine, Wineparing, passwordhash
+from model import db, connect_db, User, Food, passwordhash
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
