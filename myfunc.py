@@ -1,9 +1,9 @@
 
 import pdb
-from flask import jsonify
+import os
 import requests
-from keys import s_api
-
+import keys
+s_api = os.environ.get('s_api', keys.s_api)
 BASE_API = "https://api.spoonacular.com"
 
 
