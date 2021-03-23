@@ -1,4 +1,4 @@
-BASE_API = "https://thousandrecipes.herokuapp.com/"
+BASE_API = "https://thousandrecipes.herokuapp.com/";
 
 $('#search').hide();
 
