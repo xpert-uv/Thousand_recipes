@@ -12,27 +12,27 @@ from flask_mail import Mail, Message
 import os
 import requests
 
-CURR_USER_KEY = os.environ.get('CURR_USER_KEY', keys.CURR_USER_KEY)
+CURR_USER_KEY = os.environ.get('CURR_USER_KEY')
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL', keys.database)
+    'DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', keys.SECRET_KEY)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['MAIL_FROM_EMAIL'] = ""
-app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', keys.MAIL_SERVER)
-app.config['MAIL_PORT'] = os.environ.get('MAIL_PORT', keys.MAIL_PORT)
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+app.config['MAIL_PORT'] = os.environ.get('MAIL_PORT')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEBUG'] = False
 app.config['MAIL_USERNAME'] = os.environ.get(
-    'MAIL_USERNAME', keys.MAIL_USERNAME)
+    'MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.environ.get(
-    ' MAIL_PASSWORD', keys.MAIL_PASSWORD)
+    ' MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get(
-    'MAIL_DEFAULT_SENDER', keys.MAIL_DEFAULT_SENDER)
+    'MAIL_DEFAULT_SENDER')
 app.config['MAIL_MAX_EMAILS'] = None
 app.config['MAIL_SUPPRESS_SEND'] = False
 app.config['MAIL_ASCII_ATTACHMENTS'] = False
