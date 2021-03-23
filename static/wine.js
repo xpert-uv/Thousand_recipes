@@ -1,4 +1,4 @@
-BASE_API = "http://localhost:5000"
+BASE_API = "https://thousandrecipes.herokuapp.com/"
 
 $('#search').hide();
 
