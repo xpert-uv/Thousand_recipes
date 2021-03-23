@@ -41,7 +41,7 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 connect_db(app)
 mail = Mail(app)
-# db.drop_all()
+db.drop_all()
 db.create_all()
 
 ###################### Users ###########################
