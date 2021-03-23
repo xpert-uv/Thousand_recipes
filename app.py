@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 
-import keys
+#import keys
 import os
 import requests
 
