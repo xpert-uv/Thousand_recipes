@@ -3,7 +3,7 @@ import pdb
 import os
 import requests
 #import keys
-s_api = os.environ.get('s_api', keys.s_api)
+s_api = os.environ.get('s_api')
 BASE_API = "https://api.spoonacular.com"
 
 
