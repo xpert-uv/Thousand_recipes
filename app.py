@@ -85,7 +85,7 @@ def sing_up():
             token = s.dumps(email, salt="email-confirm")
             msg = Message("confirm Email", recipients=[email])
             link = url_for('confirm_email', token=token, _external=True)
-            msg.body = f"<b> Click to confirm your account :: {link} <b>"
+            msg.body = f"<b> Click to confirm your account :: {link} </b>"
             mail.send(msg)
         except IntegrityError:
             flash("Username already taken", 'danger')
