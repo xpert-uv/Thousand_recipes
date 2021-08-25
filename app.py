@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 
-import keys
+#import keys
 import os
 import requests
 
@@ -17,7 +17,7 @@ CURR_USER_KEY = os.environ.get('CURR_USER_KEY')
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL') or keys.database
+    'DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'idontknow')
@@ -40,7 +40,7 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = False
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 connect_db(app)
-mail = Mail(app)
+
 # db.drop_all()
 db.create_all()
 
