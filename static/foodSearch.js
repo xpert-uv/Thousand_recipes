@@ -11,6 +11,9 @@ async function searchFood() {
     console.log(response);
     $('#search').show();
     $('#search').trigger('reset');
+    if (response.data.result.length === 0) {
+        $("#result").append(generateErrorMessage)
+    }
     for (let r_data of response.data.result) {
         let recipe = $(generateRecipeHTML(r_data));
         $("#result").append(recipe)
@@ -36,3 +39,9 @@ function generateRecipeHTML(recipe) {
 }
 
 
+const generateErrorMessage = () => {
+    return `<div>
+        <h1> No recipe Found.</h1>
+    </div>`
+    
+};

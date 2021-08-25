@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Mail, Message
 
-#import keys
+import keys
 import os
 import requests
 
@@ -17,7 +17,7 @@ CURR_USER_KEY = os.environ.get('CURR_USER_KEY')
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL')
+    'DATABASE_URL') or keys.database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'idontknow')
@@ -82,11 +82,11 @@ def sing_up():
             db.session.add(user)
             db.session.commit()
             flash("User Created!", "success")
-            token = s.dumps(email, salt="email-confirm")
-            msg = Message("confirm Email", recipients=[email])
-            link = url_for('confirm_email', token=token, _external=True)
-            msg.body = f"<b> Click to confirm your account :: {link} </b>"
-            mail.send(msg)
+            #token = s.dumps(email, salt="email-confirm")
+           #msg = Message("confirm Email", recipients=[email])
+            #link = url_for('confirm_email', token=token, _external=True)
+            #msg.body = f"<b> Click to confirm your account :: {link} </b>"
+            # mail.send(msg)
         except IntegrityError:
             flash("Username already taken", 'danger')
             flash("email is already used", 'danger')
@@ -99,17 +99,17 @@ def sing_up():
         return render_template("signup_form.html", form=form)
 
 
-@app.route('/confirm_email/<token>')
-def confirm_email(token):
-    try:
-        email = s.loads(token, salt="email-confirm", max_age=3000)
-        user = User.query.filter(User.email == email).first()
-        user.email_confirm = True
-        db.session.add(user)
-        db.session.commit()
-        return "<h1> You Account has been confirmed</h1>"
-    except SignatureExpired:
-        return "<h1> Your Tocken has expired </h1>"
+# @app.route('/confirm_email/<token>')
+# def confirm_email(token):
+ #   try:
+  #      email = s.loads(token, salt="email-confirm", max_age=3000)
+   #     user = User.query.filter(User.email == email).first()
+    #    user.email_confirm = True
+     #   db.session.add(user)
+      #  db.session.commit()
+       # return "<h1> You Account has been confirmed</h1>"
+    # except SignatureExpired:
+     #   return "<h1> Your Tocken has expired </h1>"
 
 
 @app.route('/logout')
