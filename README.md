@@ -29,6 +29,10 @@ To Use
     visit [Thousand recipes](https://thousandrecipes.herokuapp.com/)
     Sign Up 
     and you are good.
+    Or 
+    if you dont want to create account, you can use the demo account
+    username: testtest
+    password: testtest
 
 Reminder:
 
