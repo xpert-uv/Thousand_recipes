@@ -4,7 +4,7 @@ from model import db, connect_db, User, Food, passwordhash
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
 from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
-
+from flask_cors import CORS
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 
@@ -15,7 +15,7 @@ import requests
 CURR_USER_KEY = os.environ.get('CURR_USER_KEY') or keys.CURR_USER_KEY
 
 app = Flask(__name__)
-
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL') or keys.database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -152,7 +152,7 @@ def edit_user(id):
 #################### Recipes ##################
 
 
-@app.route('/api/')
+@app.route('/')
 def landingpage():
     form = LoginForm()
     return render_template("landingpage.html", form=form)
@@ -162,7 +162,7 @@ def landingpage():
 def home():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     return render_template('home.html')
 
 
@@ -170,7 +170,7 @@ def home():
 def serach_recipe(food):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         response = Search_recipe(food)
         return jsonify(response)
@@ -180,7 +180,7 @@ def serach_recipe(food):
 def recipe_detail(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         response = Recipe_details(id)
         return render_template("recipe_details.html", recipe=response)
@@ -190,7 +190,7 @@ def recipe_detail(id):
 def save_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
 
         response = Recipe_details(id)
@@ -206,7 +206,7 @@ def save_recipe(id):
 def recipe_lists():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         recipe_list = Food.query.all()
         return render_template("saved_recipe.html", s_recipe=recipe_list)
@@ -216,7 +216,7 @@ def recipe_lists():
 def save_recipe_details(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         response = Recipe_details(id)
         return render_template("saved_recipe_details.html", recipe=response)
@@ -226,7 +226,7 @@ def save_recipe_details(id):
 def delete_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         del_recipe = Food.query.filter(Food.dish_id == id).first()
         db.session.delete(del_recipe)
@@ -240,7 +240,7 @@ def delete_recipe(id):
 def wine_home():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         return render_template("wine.html")
 
@@ -249,7 +249,7 @@ def wine_home():
 def search_wine(type):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         response = Search_wine(type)
         return jsonify(response)
@@ -259,7 +259,7 @@ def search_wine(type):
 def wineparing_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/api/")
+        return redirect("/")
     else:
         response = wine_paring_for_recipe(id)
         if response:

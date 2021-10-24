@@ -1,5 +1,5 @@
-//BASE_API = "https://thousandrecipes.herokuapp.com/";
-BASE_API = "http://localhost:5000/api/";
+BASE_API = "https://thousandrecipes.herokuapp.com/api";
+//BASE_API = "http://localhost:5000/api/";
 $('#search').hide();
 
 $('#btn-search').on("click", searchWine);
@@ -13,7 +13,7 @@ async function searchWine() {
     $('#search').trigger('reset');
     $("#result").empty();
 
-     if (response.data.result.length === 0) {
+     if (response.data.wines.length === 0) {
         $("#result").append(generateErrorMessage)
     }
 
@@ -23,7 +23,7 @@ async function searchWine() {
     }
     
 
-     $("#page-btn").show()
+    $("#page-btn").show()
     $("#page-btn > ul").empty();
     const totalItem = $("#result > .items").length;
     const limitPerPage = 10;
@@ -57,15 +57,16 @@ async function searchWine() {
 }
 
 function generateWineHTML(wine) {
-    return `<div class="col-sm-4" style="height:400px" >
+    return `<div class="col-sm-4 items" style=" height: fitcontent ;" >
              <div class="card mt-3" >
             <img src="${wine.image}" class="card-img-top" alt="..." style="height:200px">
             <div class="card-body text-dark">
             <ul>
             <li>${wine.title}</li>
              <li>${wine.price}</li>
-            <li>Info:<br>${wine.description}</li>
+           
             </ul>
+             <p>Info:<br>${wine.description}</p>
            
             </div>
             </div>

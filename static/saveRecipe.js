@@ -1,5 +1,5 @@
-//BASE_API = "https://thousandrecipes.herokuapp.com/";
-BASE_API="http://localhost:5000"
+BASE_API = "https://thousandrecipes.herokuapp.com/";
+//BASE_API="http://localhost:5000"
 
 $("#winebox").hide();
 $("#noWine").hide();
@@ -63,26 +63,29 @@ $("#myTab").on("click", ".nav-item", searchWine);
 async function searchWine() {
 
     const wineType = $(this).children().data("id");
-    const response = await axios.get(`${BASE_API}/searchwine/${wineType}`);
+    const response = await axios.get(`${BASE_API}/api/winesearchwine/${wineType}`);
     for (let w_data of response.data.wines) {
         let wine = generateWineHTML(w_data);
         $("#wines").append(wine);
-        console.log($(`#${wineType}`));
+        
     }
 
 }
 
 function generateWineHTML(wine) {
-    return `<div class="col-sm-4">
-             <div class="card mt-3">
-            <img src="${wine.image}" class="card-img-top" alt="...">
+    return `<div class="col-sm-4 items" style=" height: fitcontent ;" >
+             <div class="card mt-3" >
+            <img src="${wine.image}" class="card-img-top" alt="..." style="height:200px">
             <div class="card-body text-dark">
             <ul>
             <li>${wine.title}</li>
              <li>${wine.price}</li>
-            <li>Info:<br>${wine.description}</li>
+           
             </ul>
+             <p>Info:<br>${wine.description}</p>
+           
             </div>
             </div>
             </div>`;
+    
 }

@@ -15,6 +15,7 @@ def Search_recipe(recipename):
     response = requests.get(
         f'{BASE_API}/recipes/search?query={recipename}&apiKey={s_api}&number=50')
     json_response = response.json()
+    print(json_response)
     if response.status_code != 200:
         return json_response
     else:

@@ -1,5 +1,5 @@
-//BASE_API = "https://thousandrecipes.herokuapp.com/";
-BASE_API = "http://localhost:5000/api/";
+BASE_API = "https://thousandrecipes.herokuapp.com/api/";
+//BASE_API = "http://localhost:5000/api/";
 $('#search').hide();
 $("#page-btn").hide()
 $('#btn-search').on("click", searchFood);
@@ -12,6 +12,7 @@ async function searchFood() {
     $('#search').show();
     $('#search').trigger('reset');
     $("#result").empty();
+    console.log(response);
     if (response.data.result.length === 0) {
         $("#result").append(generateErrorMessage)
     }
@@ -52,6 +53,7 @@ async function searchFood() {
         }
         
     })
+    
 
 }
 
