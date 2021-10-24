@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session, g, jsonify, flash, url_for
+from flask import Flask, render_template, redirect, session, g, jsonify, flash
 
 from model import db, connect_db, User, Food, passwordhash
 from myfunc import Search_recipe, Recipe_details, Search_wine, wine_paring_for_recipe, Wine_paring_for_meal, Dish_paring_for_wine
@@ -6,36 +6,22 @@ from forms import LoginForm, SignUpForm
 from sqlalchemy.exc import IntegrityError
 
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from flask_mail import Mail, Message
 
-#import keys
+
+import keys
 import os
 import requests
 
-CURR_USER_KEY = os.environ.get('CURR_USER_KEY')
+CURR_USER_KEY = os.environ.get('CURR_USER_KEY') or keys.CURR_USER_KEY
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL')
+    'DATABASE_URL') or keys.database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'idontknow')
-app.config['MAIL_FROM_EMAIL'] = ""
-app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT'] = os.environ.get('MAIL_PORT')
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEBUG'] = False
-app.config['MAIL_USERNAME'] = os.environ.get(
-    'MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get(
-    ' MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get(
-    'MAIL_DEFAULT_SENDER')
-app.config['MAIL_MAX_EMAILS'] = None
-app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
 
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
@@ -67,7 +53,7 @@ def do_logout():
         del session[CURR_USER_KEY]
 
 
-@app.route('/signup', methods=['POST', 'GET'])
+@app.route('/api/user/signup', methods=['POST', 'GET'])
 def sing_up():
     form = SignUpForm()
     if form.validate_on_submit():
@@ -94,7 +80,7 @@ def sing_up():
 
         do_login(user)
 
-        return redirect("/home")
+        return redirect("/api/home")
     else:
         return render_template("signup_form.html", form=form)
 
@@ -112,7 +98,7 @@ def sing_up():
      #   return "<h1> Your Tocken has expired </h1>"
 
 
-@app.route('/logout')
+@app.route('/api/user/logout')
 def logout():
     """Handle logout of user."""
 
@@ -122,7 +108,7 @@ def logout():
         return redirect('/')
 
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route('/api/user/login', methods=["GET", "POST"])
 def login():
     """Handle user login."""
 
@@ -135,7 +121,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect("/home")
+            return redirect("/api/home")
 
         flash("Invalid credentials.", 'danger')
     except ValueError:
@@ -144,11 +130,11 @@ def login():
     return render_template('landingpage.html', form=form)
 
 
-@app.route('/user/<int:id>/edit', methods=['GET', 'POST'])
+@app.route('/api/user/edit/<int:id>', methods=['GET', 'POST'])
 def edit_user(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         user = User.query.get_or_404(id)
         form = SignUpForm(obj=user)
@@ -161,50 +147,50 @@ def edit_user(id):
             db.session.add(user)
             db.session.commit()
             flash("User Details Updated", "success")
-            return redirect(f'/user/{id}/edit')
+            return redirect(f'/api/user/edit/{id}')
         return render_template("user_edit.html", form=form)
 #################### Recipes ##################
 
 
-@app.route('/')
+@app.route('/api/')
 def landingpage():
     form = LoginForm()
     return render_template("landingpage.html", form=form)
 
 
-@app.route('/home')
+@app.route('/api/home')
 def home():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     return render_template('home.html')
 
 
-@app.route('/searchrecipe/<food>')
+@app.route('/api/recipe/search/<food>')
 def serach_recipe(food):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         response = Search_recipe(food)
         return jsonify(response)
 
 
-@app.route('/recipedetail/<int:id>')
+@app.route('/api/recipe/detail/<int:id>')
 def recipe_detail(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         response = Recipe_details(id)
         return render_template("recipe_details.html", recipe=response)
 
 
-@app.route('/saverecipe/<int:id>')
+@app.route('/api/recipe/save/<int:id>')
 def save_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
 
         response = Recipe_details(id)
@@ -213,49 +199,67 @@ def save_recipe(id):
         db.session.add(recipe)
         db.session.commit()
         flash("Recipe is saved.", 'success')
-        return redirect("/savedrecipe")
+        return redirect("/api/recipe/savedrecipe")
 
 
-@app.route('/savedrecipe')
+@app.route('/api/recipe/savedrecipe')
 def recipe_lists():
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         recipe_list = Food.query.all()
         return render_template("saved_recipe.html", s_recipe=recipe_list)
 
 
-@app.route('/savedrecipe/details/<int:id>')
+@app.route('/api/recipe/savedrecipe/details/<int:id>')
 def save_recipe_details(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         response = Recipe_details(id)
         return render_template("saved_recipe_details.html", recipe=response)
 
 
-@app.route('/recipe/delete/<int:id>')
+@app.route('/api/recipe/savedrecipe/delete/<int:id>')
 def delete_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         del_recipe = Food.query.filter(Food.dish_id == id).first()
         db.session.delete(del_recipe)
         db.session.commit()
-        return redirect('/savedrecipe')
+        return redirect('/api/recipe/savedrecipe')
 
 
 ######################## Wine ################
 
+@app.route('/api/wine')
+def wine_home():
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/api/")
+    else:
+        return render_template("wine.html")
 
-@app.route('/api/wineparing/<int:id>')
+
+@app.route('/api/wine/searchwine/<type>')
+def search_wine(type):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/api/")
+    else:
+        response = Search_wine(type)
+        return jsonify(response)
+
+
+@app.route('/api/wine/wineparing/<int:id>')
 def wineparing_recipe(id):
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect("/api/")
     else:
         response = wine_paring_for_recipe(id)
         if response:
@@ -265,22 +269,3 @@ def wineparing_recipe(id):
                 "wineParing": "No wine is reccomended with this meal"
             }
             return jsonify(response)
-
-
-@app.route('/wine')
-def wine_home():
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-    else:
-        return render_template("wine.html")
-
-
-@app.route('/searchwine/<type>')
-def search_wine(type):
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-    else:
-        response = Search_wine(type)
-        return jsonify(response)

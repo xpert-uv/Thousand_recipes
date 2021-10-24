@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="/static/css/user.css"> {% endblock %}
 {% block buttons%}
 
-<a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{recipe.id}}'
+<a id="view-btn" type="button" class="btn btn-info view-btn" href='/api/recipe/savedrecipe/delete/{{recipe.id}}'
     data-id=${recipe.id}>Delete</a>
 
 <a id="wine-btn" type="button" class="btn btn-success wine-btn" data-id={{recipe.id}}>Wine Paring</a>

@@ -1,4 +1,5 @@
-BASE_API = "https://thousandrecipes.herokuapp.com/";
+//BASE_API = "https://thousandrecipes.herokuapp.com/";
+BASE_API="http://localhost:5000"
 
 $("#winebox").hide();
 $("#noWine").hide();
@@ -28,7 +29,7 @@ async function paringWine() {
 
     const id = $(this).data('id');
     console.log(id);
-    response = await axios.get(`${BASE_API}/api/wineparing/${id}`)
+    response = await axios.get(`${BASE_API}/api/wine/wineparing/${id}`)
     console.log(response);
     console.log(response.data.wineParing);
     if (response.data.wineParing) {
@@ -36,6 +37,7 @@ async function paringWine() {
         let msg = generateWineHTML_errors(response.data.wineParing);
         console.log(msg);
         $("#noWine").append(msg);
+        $("#wine-btn").hide();
     }
     else {
 
@@ -48,6 +50,8 @@ async function paringWine() {
             $("#myTabContent").append(tab_pannels);
             break;
         };
+
+        $("#wine-btn").hide();
     }
 }
 

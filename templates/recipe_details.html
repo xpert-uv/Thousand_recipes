@@ -1,5 +1,7 @@
 {%extends 'home.html'%}
 {% block title%} Recipe Deatils{%endblock%}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/home.css') }}">{%endblock%}
 {% block content%}
 <div id="signupBox" class="container mt-3 ">
     <div class="card mt-3 mb-3">
@@ -10,10 +12,10 @@
             <p class='simpletext'><b>Info:</b><br>{{recipe.description}}</p>
             <p class='simpletext'><b>ingredients :</b><br>{{recipe.ingredients}}</p>
             <p class='simpletext'><b>Instruction :</b> <br>{{recipe.instructions}}</p>
-            <a id="view-btn" type="button" class="btn btn-dark view-btn" href='{{BASE_API}}/home'>Back</a>
+            <a id="view-btn" type="button" class="btn btn-dark view-btn" href='{{BASE_API}}/api/home'>Back</a>
             {% block buttons%}
 
-            <a id="view-btn" type="button" class="btn btn-danger view-btn" href='{{BASE_API}}/saverecipe/{{recipe.id}}'
+            <a id="view-btn" type="button" class="btn btn-danger view-btn" href='{{BASE_API}}/api/recipe/save/{{recipe.id}}'
                 data-id=${recipe.id}>Save</a>
             {%endblock%}
         </div>

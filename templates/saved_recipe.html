@@ -1,5 +1,7 @@
 {% extends "home.html"%}
 {% block title%}My Recipes{%endblock%}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/home.css') }}">{%endblock%}
 {% block content%}
 
 <div class="container d-flex ">
@@ -14,8 +16,8 @@
                         <li>Ready In:{{save.total_time}}</li>
                     </ul>
                     <a id="view-btn" type="button" class="btn btn-danger view-btn"
-                        href='/savedrecipe/details/{{save.dish_id}}'>View</a>
-                    <a id="view-btn" type="button" class="btn btn-info view-btn" href='/recipe/delete/{{save.dish_id}}'
+                        href='/api/recipe/savedrecipe/details/{{save.dish_id}}'>View</a>
+                    <a id="view-btn" type="button" class="btn btn-info view-btn" href='/api/recipe/savedrecipe/delete/{{save.dish_id}}'
                         data-id=${recipe.id}>Delete</a>
                 </div>
             </div>

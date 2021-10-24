@@ -1,11 +1,12 @@
 {% extends 'landingpage.html'%}
 {% block title%}Sign Up{% endblock %}
 {%block content%}
-
+{% block link%}
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/home.css')}}"> {% endblock %}
 <div id="signupBox">
-    <h1 class="display-1 ms-4">Sing Up</h1>
+    <h1 class="display-1 ms-4">Sign Up</h1>
     <div class="mx-5 my-3">
-        <form action="/signup" method="POST">
+        <form action="/api/user/signup" method="POST">
             {{form.hidden_tag()}}
             {% for field in form
             if field.widget.input_type != 'hidden'%}

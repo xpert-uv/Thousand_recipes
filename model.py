@@ -19,7 +19,6 @@ class User(db.Model):
     first_name = db.Column(db.String(30), nullable=False)
     last_name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.Text, unique=True, nullable=False)
-    email_confirm = db.Column(db.Boolean, default=False)
 
     food = db.Column(db.Integer, db.ForeignKey(
         "foodrecipes.id"))

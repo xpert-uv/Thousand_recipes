@@ -14,18 +14,18 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/api/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/wine">Wine</a>
+                    <a class="nav-link" href="/api/wine">Wine</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/savedrecipe">SavedRecipe</a>
+                    <a class="nav-link" href="/api/recipe/savedrecipe">SavedRecipe</a>
                 </li>
             </ul>
-            <span class="navbar-text"><a class="nav-link" href="/user/{{g.user.id}}/edit"><i
+            <span class="navbar-text"><a class="nav-link" href="/api/user/edit/{{g.user.id}}"><i
                         class="fas fa-user-edit"></i></a></span>
-            <span class="navbar-text"><a class="nav-link" href="/logout">Logoout</a></span>
+            <span class="navbar-text"><a class="nav-link" href="/api/user/logout">Logout</a></span>
         </div>
     </div>
 </nav>{%endblock%}
@@ -39,8 +39,12 @@
         <button id='btn-search' class="btn btn-success mx-4">Search</button>
     </div>
 </div>
-<section id="search" class="d-flex">
+<section id="search" class="d-flex flex-column ">
     <div id="result" class="row mb-5"></div>
+    <nav id="page-btn" class="justify-content-center" aria-label="Page navigation example">
+        <ul class="pagination">       
+        </ul>
+    </nav>
 
 </section>
 <script src="../static/foodSearch.js"></script>
