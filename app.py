@@ -8,16 +8,16 @@ from flask_cors import CORS
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 
-import keys
+#import keys
 import os
 import requests
 
-CURR_USER_KEY = os.environ.get('CURR_USER_KEY') or keys.CURR_USER_KEY
+CURR_USER_KEY = os.environ.get('CURR_USER_KEY')
 
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL') or keys.database
+    'DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'idontknow')
