@@ -43,7 +43,8 @@ pycparser==2.19
 Pygments==2.7.4
 pylint==2.6.0
 python-dateutil==2.8.1
-pywin32==300
+pypiwin32==223
+pywin32==223
 pyzmq==22.0.3
 requests==2.25.1
 six==1.15.0
