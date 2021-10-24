@@ -13,6 +13,7 @@ dnspython==2.1.0
 email-validator==1.1.2
 Flask==1.1.2
 Flask-Bcrypt==0.7.1
+Flask-Cors==3.0.10
 Flask-Debug==0.4.3
 Flask-DebugToolbar==0.11.0
 Flask-Mail==0.9.1
@@ -42,7 +43,7 @@ pycparser==2.19
 Pygments==2.7.4
 pylint==2.6.0
 python-dateutil==2.8.1
-
+pywin32==300
 pyzmq==22.0.3
 requests==2.25.1
 six==1.15.0
